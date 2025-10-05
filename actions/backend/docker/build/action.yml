@@ -1,0 +1,33 @@
+name: "Docker Build"
+description: "Builds and pushes the image to specified Hub"
+
+inputs:
+  image:
+    description: "Docker image name"
+    required: true
+  tag:
+    description: "Docker image tag"
+    required: true
+  extraParams:
+    description: "Extra parameters for docker build"
+    required: false
+    type: string
+    default: ""
+  devkit:
+    description: "flag to use docker build devkit"
+    required: false
+    type: boolean
+    default: false
+  path:
+    description: "Path for the dockerfile"
+    required: false
+    type: string
+    default: "."
+
+runs:
+  using: "composite"
+  steps:
+    - name: "Build docker image"
+      run: docker build ${{ inputs.extraParams }} -t ${{ inputs.image }}:${{ inputs.tag }} ${{ inputs.path }}
+
+    # TODO: add a docker push to a ghcr hub

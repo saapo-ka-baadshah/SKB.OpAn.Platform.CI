@@ -1,0 +1,9 @@
+# Runs on linux
+name: "Docker Verify"
+description: "Verifies docker installation"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Verify docker version
+      run: docker --version

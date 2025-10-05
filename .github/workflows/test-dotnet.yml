@@ -1,0 +1,46 @@
+name: "Dotnet build and test"
+description: "Build the dotnet project, then test the project"
+
+env:
+  FULL_PACKAGE_CONTROL_PAT: ${{ secrets.GH_PAT }}
+  NUGET_OWNER_USERNAME: ${{ vars.USERNAME }}
+  ASPNETCORE_ENVIRONMENT: Testing
+
+on:
+  workflow_call:
+    inputs:
+      projectName:
+        description: "Project name"
+        required: false
+        type: string
+        default: ${{ github.event.repository.name }}
+
+      packageOutputDir:
+        description: "Package output directory where the binaries would be saved"
+        required: false
+        type: string
+        default: ${{ github.workspace }}/bin
+
+jobs:
+  test:
+    name: "[${{ github.event.repository.name }}] Test"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: OpAnFramework/OpAn.Platform.CI/actions/dotnet/common/initialize@main
+
+      # You can test your matrix by printing the current dotnet version
+      - name: Display dotnet version
+        run: dotnet --version
+
+      # Restore Dependencies
+      - name: Install dependencies
+        run: dotnet restore
+
+      # Dotnet Build
+      - name: Build
+        run: dotnet build --no-restore --configuration Release /p:Version=${{ steps.gitversion.outputs.SemVer }}
+
+      - name: Test
+        run: dotnet test --no-restore
