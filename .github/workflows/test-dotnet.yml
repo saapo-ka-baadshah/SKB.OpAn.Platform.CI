@@ -1,11 +1,6 @@
 name: "Dotnet build and test"
 description: "Build the dotnet project, then test the project"
 
-env:
-  FULL_PACKAGE_CONTROL_PAT: ${{ secrets.GH_PAT }}
-  NUGET_OWNER_USERNAME: ${{ vars.USERNAME }}
-  ASPNETCORE_ENVIRONMENT: Testing
-
 on:
   workflow_call:
     inputs:
@@ -21,10 +16,22 @@ on:
         type: string
         default: ${{ github.workspace }}/bin
 
+      USERNAME:
+        description: "Username expected for the nuget authentifcation"
+        type: string
+        required: true
+
+    secrets:
+      GH_PAT:
+        required: true
 jobs:
   test:
     name: "[${{ github.event.repository.name }}] Test"
     runs-on: ubuntu-latest
+    env:
+      FULL_PACKAGE_CONTROL_PAT: ${{ secrets.GH_PAT }}
+      NUGET_OWNER_USERNAME: ${{ inputs.USERNAME }}
+      ASPNETCORE_ENVIRONMENT: Testing
     steps:
       - uses: actions/checkout@v4
 
