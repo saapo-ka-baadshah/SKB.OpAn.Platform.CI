@@ -27,7 +27,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: OpAnFramework/OpAn.Platform.CI/actions/dotnet/common/initialize@main
+      - uses: saapo-ka-baadshah/SKB.OpAn.Platform.CI/actions/dotnet/common/initialize@main
 
       # You can test your matrix by printing the current dotnet version
       - name: Display dotnet version
