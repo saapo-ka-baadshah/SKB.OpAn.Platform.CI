@@ -14,6 +14,11 @@ inputs:
     type: string
     default: "5.x"
 
+outputs:
+  SemVer:
+    description: "Semantic version from GitVersion"
+    value: ${{ steps.gitversion.outputs.SemVer }}
+
 runs:
   using: "composite"
   steps:
