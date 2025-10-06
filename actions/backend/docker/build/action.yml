@@ -59,7 +59,7 @@ runs:
           -t $ImageNameSemVer \
           ${{ inputs.path }}
 
-        echo "imageName=$ImageName" > "$GITHUB_OUTPUT""
+        echo "imageName=$ImageName" > "$GITHUB_OUTPUT"
       shell: bash
 
     - name: Push image
