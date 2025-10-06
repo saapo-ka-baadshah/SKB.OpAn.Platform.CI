@@ -36,6 +36,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - uses: saapo-ka-baadshah/SKB.OpAn.Platform.CI/actions/dotnet/common/initialize@main
+        id: initialize
 
       # You can test your matrix by printing the current dotnet version
       - name: Display dotnet version
@@ -47,7 +48,7 @@ jobs:
 
       # Dotnet Build
       - name: Build
-        run: dotnet build --no-restore --configuration Release /p:Version=${{ steps.gitversion.outputs.SemVer }}
+        run: dotnet build --no-restore --configuration Release /p:Version=${{ steps.initialize.outputs.SemVer }}
 
       - name: Test
         run: dotnet test --no-restore
