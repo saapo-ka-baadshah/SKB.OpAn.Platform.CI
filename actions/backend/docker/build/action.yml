@@ -60,6 +60,7 @@ runs:
           ${{ inputs.path }}
 
         echo "imageName=$ImageName" > "$GITHUB_OUTPUT""
+      shell: bash
 
     - name: Push image
       run: |
@@ -69,3 +70,4 @@ runs:
         docker push ${{ steps.dockerBuild.outputs.imageName }}
         docker push $ImageNameLatest
         docker push $ImageNameSemVer
+      shell: bash
