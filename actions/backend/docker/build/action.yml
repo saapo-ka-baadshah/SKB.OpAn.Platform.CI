@@ -8,6 +8,10 @@ inputs:
   tag:
     description: "Docker image tag"
     required: true
+  semVer:
+    description: "Semantic Version"
+    required: true
+    type: string
   extraParams:
     description: "Extra parameters for docker build"
     required: false
@@ -44,12 +48,15 @@ runs:
       run: |
         ImageName=ghcr.io/${{ inputs.organisation }}/${{ inputs.image }}:${{ inputs.tag }}
         ImageNameLatest=ghcr.io/${{ inputs.organisation }}/${{ inputs.image }}:latest
+        ImageNameSemVer=ghcr.io/${{ inputs.organisation }}/${{ inputs.image }}:${{ inputs.semVer }}
+
 
         docker build \
           ${{ inputs.extraParams }} \
           --build-arg DEVKIT=${{ inputs.devkit }} \
           -t $ImageName \
           -t $ImageNameLatest \
+          -t $ImageNameSemVer \
           ${{ inputs.path }}
 
         echo "imageName=$ImageName" > "$GITHUB_OUTPUT""
@@ -57,6 +64,8 @@ runs:
     - name: Push image
       run: |
         ImageNameLatest=ghcr.io/${{ inputs.organisation }}/${{ inputs.image }}:latest
+        ImageNameSemVer=ghcr.io/${{ inputs.organisation }}/${{ inputs.image }}:${{ inputs.semVer }}
 
         docker push ${{ steps.dockerBuild.outputs.imageName }}
         docker push $ImageNameLatest
+        docker push $ImageNameSemVer

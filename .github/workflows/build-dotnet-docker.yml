@@ -47,6 +47,7 @@ jobs:
         with:
           image: ${{ inputs.imageName }}
           tag: ${{ inputs.imageTag }}
+          semVer: ${{ steps.initialize.outputs.SemVer }}
           devkit: true
           extraParams: "--secret id=ghUser,env=GITHUB_OWNER --secret id=ghPass,env=FULL_PACKAGE_CONTROL_PAT"
         name: "[OpAnFramework - GHCR] Publish"
