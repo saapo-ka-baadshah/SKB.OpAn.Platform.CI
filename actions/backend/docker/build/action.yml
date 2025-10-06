@@ -43,15 +43,20 @@ runs:
       id: dockerBuild
       run: |
         ImageName=ghcr.io/${{ inputs.organisation }}/${{ inputs.image }}:${{ inputs.tag }}
+        ImageNameLatest=ghcr.io/${{ inputs.organisation }}/${{ inputs.image }}:latest
 
         docker build \
           ${{ inputs.extraParams }} \
           --build-arg DEVKIT=${{ inputs.devkit }} \
           -t $ImageName \
+          -t $ImageNameLatest \
           ${{ inputs.path }}
 
         echo "imageName=$ImageName" > "$GITHUB_OUTPUT""
 
     - name: Push image
       run: |
+        ImageNameLatest=ghcr.io/${{ inputs.organisation }}/${{ inputs.image }}:latest
+
         docker push ${{ steps.dockerBuild.outputs.imageName }}
+        docker push $ImageNameLatest
