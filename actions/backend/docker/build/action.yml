@@ -25,7 +25,7 @@ inputs:
   organisation:
     description: "GHCR organisational scope"
     type: string
-    default: "OpAnFramework"
+    default: "opanframework"
   path:
     description: "Path for the dockerfile"
     required: false
