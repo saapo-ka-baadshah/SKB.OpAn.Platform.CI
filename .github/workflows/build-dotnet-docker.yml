@@ -1,0 +1,52 @@
+name: "[DOTNET] Builds docker image"
+description: "Builds the docker image specified for the dotnet applications"
+
+on:
+  workflow_call:
+    inputs:
+      projectName:
+        description: "Project name"
+        required: false
+        type: string
+        default: ${{ github.event.repository.name }}
+
+      imageName:
+        description: "Docker image name"
+        required: true
+        type: string
+
+      imageTag:
+        description: "Docker image tag"
+        required: true
+        type: string
+
+      USERNAME:
+        description: "Username expected for the nuget authentifcation"
+        type: string
+        required: true
+
+    secrets:
+      GH_PAT:
+        required: true
+
+jobs:
+  docker_build:
+    name: "[${{ github.event.repository.name }}] Build"
+    runs-on: ubuntu-latest
+    env:
+      FULL_PACKAGE_CONTROL_PAT: ${{ secrets.GH_PAT }}
+      NUGET_OWNER_USERNAME: ${{ inputs.USERNAME }}
+      GITHUB_OWNER: ${{ inputs.USERNAME }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: saapo-ka-baadshah/SKB.OpAn.Platform.CI/actions/dotnet/common/initialize@main
+        id: initialize
+
+      - uses: saapo-ka-baadshah/SKB.OpAn.Platform.CI/actions/backend/docker/build@main
+        with:
+          image: ${{ inputs.imageName }}
+          tag: ${{ inputs.imageTag }}
+          devkit: true
+          extraParams: "--secret id=ghUser,env=GITHUB_OWNER --secret id=ghPass,env=FULL_PACKAGE_CONTROL_PAT"
+        name: "[OpAnFramework - GHCR] Publish"

@@ -36,6 +36,10 @@ runs:
       id: gitversion
       uses: gittools/actions/gitversion/execute@v0
 
+    - name: Display SemVer
+      run: |
+        echo ${{ steps.gitversion.outputs.SemVer }}
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
